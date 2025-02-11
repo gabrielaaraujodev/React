@@ -1,26 +1,34 @@
 import React from "react";
-import Home from "./Home";
-import Produtos from "./Produtos";
-import List from "./List";
+import Button from "./Button";
+import Produto from './Produto'
 
-// Replique a interface como a apresentada na aula
-// Utilize a array abaixo para mostrar os produtos
-// Quebre em componentes o que precisar ser reutilizado
-// Dica: const { pathname } = window.location; (puxa o caminho do URL)
+// Os links abaixo puxam dados de um produto em formato JSON
+// https://ranekapi.origamid.dev/json/api/produto/tablet
+// https://ranekapi.origamid.dev/json/api/produto/smartphone
+// https://ranekapi.origamid.dev/json/api/produto/notebook
+// Crie uma interface com 3 botões, um para cada produto.
+// Ao clicar no botão faça um fetch a api e mostre os dados do produto na tela.
+// Mostre apenas um produto por vez
+// Mostre a mensagem carregando... enquanto o fetch é realizado
+
 
 const App = () => {
-
-  const { pathname } = window.location
+  
+  const [dados, setDados] = React.useState(null)
+  const [loading, setLoading] = React.useState(null)
 
   return (
     <div>
-      <ul>
-        <List nome = "home" />
+      <Button produto = "tablet" loading = {loading} setLoading = {setLoading} setDados = {setDados}/>
+      <Button produto = "smartphone" loading = {loading} setLoading = {setLoading} setDados = {setDados}/>
+      <Button produto = "notebook" loading = {loading} setLoading = {setLoading} setDados = {setDados}/>
 
-        <List nome = "produtos" />
 
-        {pathname == "/home" ? <Home cor = "green" /> : <Produtos cor = "green" />}
-      </ul>
+      {loading && <p>Carregando...</p>}
+
+      {dados && !loading && <Produto data = {dados}/>}
+
+
     </div>
   )
 
