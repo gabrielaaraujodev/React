@@ -1,30 +1,46 @@
 import React from 'react';
-import {GlobalContext} from './FetchData'
+import Form from './Form';
 
 const App = () => {
 
-  const global = React.useContext(GlobalContext);
+  const [form, setForm] = React.useState({
+    nome: '',
+    email: '',
+    senha: '',
+    cep: '',
+    rua: '',
+    numero: '',
+    bairro: '',
+    cidade: '',
+    estado: '',
+  });
+
+  const [response, setResponse] = React.useState(null);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    fetch('https://ranekapi.origamid.dev/json/api/usuario', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form),
+    }).then(response => {setResponse(response)})  
+  }
 
   return (
     <div>
-      { 
-        global.dados != null && (
-          <>
-            <p>Nome: {global.dados.nome}</p> 
-            <p>Preço: {global.dados.preco}</p> 
-            <button onClick={global.limparDados}>Limpar Dados</button>  
-          </>
-        ) 
-      }
+      <Form setForm = {setForm} handleSubmit={handleSubmit} form={form} response={response}/>
     </div>
   );
 };
 
 export default App;
 
-// Utilize o GlobalContext do exemplo anterior para puxar os dados da API abaixo:
-// https://ranekapi.origamid.dev/json/api/produto/
-// assim que o usuário acessar o app
-// coloque os dados da API no contexto global, dando acesso aos dados da mesma
-// defina uma função chamada limparDados que é responsável por zerar os dados de produto
-// e exponha essa função no contexto global
+
+// Faça um fetch (POST) para a API abaixo
+// Para a criação ser aceita é necessário enviar dodos de:
+// nome, email, senha, cep, rua, numero, bairro, cidade e estado
+
+// Mostre uma mensagem na tela, caso a resposta da API seja positiva
