@@ -1,46 +1,35 @@
 import React from 'react';
-import Form from './Form';
+
+const coresArray = ['azul', 'roxo', 'laranja', 'verde', 'vermelho', 'cinza'];
 
 const App = () => {
 
-  const [form, setForm] = React.useState({
-    nome: '',
-    email: '',
-    senha: '',
-    cep: '',
-    rua: '',
-    numero: '',
-    bairro: '',
-    cidade: '',
-    estado: '',
-  });
+  const [cores, setCores] = React.useState([])
+  
+  function handleChange({target}) {
 
-  const [response, setResponse] = React.useState(null);
-
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    fetch('https://ranekapi.origamid.dev/json/api/usuario', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(form),
-    }).then(response => {setResponse(response)})  
+    if (target.checked)
+      setCores([...cores, target.value])
+    else
+      setCores(cores.filter((cor) => cor !== target.value))
   }
 
   return (
-    <div>
-      <Form setForm = {setForm} handleSubmit={handleSubmit} form={form} response={response}/>
-    </div>
+    <form>
+      {coresArray.map( cor => (
+        <label key={cor}>
+          <input 
+            type='checkbox'
+            value={cor}
+            checked={cores.includes(cor)}
+            onChange={handleChange}
+          />
+        
+        {cor}
+        </label>
+      ))}      
+    </form>
   );
 };
 
 export default App;
-
-
-// Faça um fetch (POST) para a API abaixo
-// Para a criação ser aceita é necessário enviar dodos de:
-// nome, email, senha, cep, rua, numero, bairro, cidade e estado
-
-// Mostre uma mensagem na tela, caso a resposta da API seja positiva
